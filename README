@@ -1,0 +1,116 @@
+Godag builds a directed acyclic graph from go source code imports. A topological sort is performed on the dependency graph to figure out compile order. The default back-end is gc [8g,6g,5g], but gccgo and express, can also be used. So for a pure go project no Makefile is necessary, testing, formatting and building external dependencies are also automated.
+
+
+------------------------------------------------------------
+About:
+------------------------------------------------------------
+
+This program will hopefully make it easier to compile
+source code written in the go programming language.
+
+A dependency graph is constructed from imports, this
+is sorted with a topological sort to figure out if a legal
+compile order is possible (loop check). The dependency
+graph itself is used to compile packages, i.e. each
+packages sits in its own go-routine and waits for its
+dependencies to finish before it starts.
+
+
+
+------------------------------------------------------------
+Install:  [Linux/Unix/Mac/Windows]
+------------------------------------------------------------
+
+> go run mk.go install
+
+This will compile + link the binary (gd) and move it
+to $HOME/bin if it is present, if not it falls back to
+$GOBIN.
+
+
+> go run mk.go -help  to see all available targets/options
+
+
+
+------------------------------------------------------------
+Try it Out:
+------------------------------------------------------------
+
+You can try to compile the same source using the generated
+executable: gd
+
+
+$ gd src          # will compile source inside src
+$ gd -p src       # will print dependency info gathered
+$ gd -s src       # will print legal compile order
+$ gd src -test    # will run unit-tests
+$ gd src -fmt     # will format (gofmt) the source-code
+$ gd src -o gd    # will compile and link executable
+
+
+
+------------------------------------------------------------
+Contributors
+------------------------------------------------------------
+
+Hans Stimer
+Markus Martin
+Robert Hencke
+Hunter Freyer
+Michael Henke
+Remo Hertig
+
+
+
+------------------------------------------------------------
+Philosophy (Babble?)
+------------------------------------------------------------
+
+Without a tool to figure out which order the source should
+be compiled, Makefiles are usually the result. Makefiles
+are static in nature, which make them a poor choice to handle
+a dynamic problem like a changing source tree. They also make
+flat structures quite common, since this usually simplifies
+the Makefiles, but makes organisation far less intuitive than
+a directory-tree package-structure.
+
+
+
+------------------------------------------------------------
+Completion
+------------------------------------------------------------
+
+Bash completion script for gd is placed inside util/
+
+
+
+
+------------------------------------------------------------
+Logo
+------------------------------------------------------------
+
+The logo was made with LaTeX and tikz, it's basically just
+an upside down g filled with yellow..
+
+=start LaTeX
+
+\documentclass[12pt]{article}
+\usepackage{tikz}
+\usepackage{nopageno}
+
+
+\begin{document}
+\begin{tikzpicture}[remember picture,overlay]
+  \node [scale=75,fill=black!100,opacity=.8, rounded corners]
+   at (current page.center) {}; 
+  \node [rotate=180,scale=63,text opacity=0.9,yellow]
+   at (current page.center) {g};
+\end{tikzpicture}
+\end{document}
+
+
+=end LaTeX
+
+
+
+-bjarneh
